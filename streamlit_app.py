@@ -35,110 +35,15 @@ st.set_page_config(
 # row limit
 RowCap = 10000
 
-tab1, tab2, tab3 = st.tabs(["Main", "To-do's", "⚙️ Limitations"])
-
-with tab2:
-
-    with st.expander("To-do"):
-
-        st.write(
-            """
-    * Finish explanation in aggrid tips section
-    * Fix alignment of rows in the filter section convo: https://snowflake.slack.com/archives/C03AFAHCG1J/p1658239877172969
-    * Finish explanation in the "about" section
-    * Check that "You can't see pages and pages" error message is triggered properly
-    * From requests.exceptions import ReadTimeout except ReadTimeout: # Try the same request again (https://kite.trade/forum/discussion/10941/socket-timeout-the-read-operation-timed-out)
-        
-        """
-        )
-
-        st.write("")
-
-    with st.expander("Optional"):
-
-        st.write(
-            """
-    * [Design] add a right arrow at the top (make your selection)
-    * [Design] remove all the hashed code in the file
-    * [Design] add a gif when loading?
-        
-        """
-        )
-
-        st.write("")
-
-    with st.expander("Done"):
-
-        st.write(
-            """
-
-    * [Design] check that "log in first" message is correct
-    * Add switch to toggle between "centered" and "wide" layout
-    * Adding a little tick box when connection is ok
-    * [Done, by duplicating the forms] Remove containers as it seems to be creating a bug?
-    * [Done] Add thousands separator to the number of results
-    * Add a 2nd nested dimension, and make sure it is working properly
-    * [Karen] Remove token print at the top of the page (hashed "st.write(st.session_state.my_token_input)")
-    * [AgGrid] increase AGGrid size OF THE GRID
-    * [AgGrid] [ASKED ON TWITTER] add index to aggrid
-    * Display the number of rows in the table (see Twitter app)
-    * Add remaining dimensions to the app (device, country, etc)
-    * Add a message about 10k rows limit
-    * In Arrow image, change "select a course" with "You need to log in via Google OAuth first. Log in via left hand side menu!"
-    * [Design] add an expander "about this connector"
-    * add a download button when native table is selected
-    * [Design] add "app created" message
-    * Remove colored emojis as it looks too much!
-    * Fix checkbox AgGrid bug: Aggrid table is displayed even if checkbox is unchecked
-    * Fix checkbox AgGrid bug: sometimes 2 aggrid tables are displayed
-    * Try to deploy with new secrets (it's working locally)
-    * Change formatting on Aggrid tips (make it like proper mardown (see Diffcheker or DBT readme))
-    * [AgGrid] Add a text on how to download the data in aggrid
-    * move JSON credentials to a TOML file
-    * remove aggrid table at the top of the page
-    * [Design] remove duplicated dataframe
-    * replace 'fetch data' by 'access API data'
-    * Try to deploy the app to streamlit cloud
-    * remove fileExists = os.path.isfile("data.csv") and see if it works
-    * [AgGrid] add option to switch between aggrid and table
-    * add exception handling for ValueError: Please supply either code or authorization_response parameters
-    * add search console logo
-    * remove check all properties in the account
-    * remove dafault "Web property to review"
-    * add exception handling for discover data (when no data is returned)
-    * Update aggrid as red highlight issue now
-    * remove the non aggrid dataframe
-    * try site_list to get a list of sites
-    * DONE -> Update service account credentials to remove streamprophet (https://console.cloud.google.com/apis/credentials/consent?project=ultra-envoy-290208)
-
-        
-        """
-        )
-        st.write("")
-
-st.markdown("")
-
-st.sidebar.image("logo.png", width=290)
-
-st.sidebar.markdown("")
-
-st.write("")
-
-with tab3:
-
-    st.write(
-        """
-* 10K rows limit on the Cloud version
-* If you have more data, you can fork the app and remove the row limit
-* You can filter any dimension in the table even if the dimension hasn't been added pre-selected. I'm working on a fix for this.
-    
-    """
-    )
-
-    st.write("")
-
+tab1, tab2 = st.tabs(["Main", "⚙️ Limitations"])
 
 with tab1:
+
+    st.sidebar.image("logo.png", width=290)
+
+    st.sidebar.markdown("")
+
+    st.write("")
 
     # Convert secrets from the TOML file to strings
     clientSecret = str(st.secrets["installed"]["client_secret"])
@@ -301,7 +206,7 @@ with tab1:
                 with col1:
                     search_type = st.selectbox(
                         "Search type",
-                        ("web", "discover", "news", "video", "googleNews", "image"),
+                        ("web","video","image","news","googleNews"),
                         help="You can specify the search type data you want to retrieve by using the search_type method with your query. The following values are currently supported by the API: news, video, image, web, discover & googleNews. If you don't use this method, the default value used will be web,",
                     )
 
@@ -557,8 +462,8 @@ with tab1:
                     with col1:
                         search_type = st.selectbox(
                             "Search type",
-                            ("web", "discover", "news", "video", "googleNews", "image"),
-                            help="You can specify the search type data you want to retrieve by using the search_type method with your query. The following values are currently supported by the API: news, video, image, web, discover & googleNews. If you don't use this method, the default value used will be web,",
+                            ("web", "news", "video", "googleNews", "image"),
+                            help="You can specify the search type data you want to retrieve by using the search_type method with your query. The following values are currently supported by the API: video, image, web and news/googleNews. If you don't use this method, the default value used will be web,",
                         )
 
                     with col2:
@@ -944,21 +849,23 @@ with tab1:
 
     except ValueError as ve:
 
-        # container.info(
-        #     "👈 You need to log in via Google OAuth first. Log in via left hand side menu!"
-        # )
-
-        # emoji_backhand_index = container.image("Arrow2.png", width=700)
-        #
-        # col1, col2 = st.columns([1,3])
-        #
-        # with col1:
-        #     emoji_backhand_index3 = container.image("https://emojipedia-us.s3.amazonaws.com/source/skype/289/left-arrow_2b05-fe0f.png", width=40)
-        #
-        # with col2:
-        #     st.sidebar.warning("You need to log in via Google OAuth first. Log in via left hand side menu!")
-        #     # container3 = st.container()
-
         st.warning(
-            "You need to log in via Google OAuth first. Log in via left hand side menu!"
+            "⚠️ You need to log in via Google OAuth first. Log in via left-hand side menu!"
         )
+
+    except IndexError:
+        st.info(
+            "⛔ It seems you haven’t correctly configured Google Search Console! Click [here](https://support.google.com/webmasters/answer/9008080?hl=en) for more information on how to get started!"
+        )
+
+with tab2:
+
+    st.write(
+        """
+* There's a `10K` row limit per API call on the [Cloud](https://streamlit.io/cloud) version. You can remove  this limit by [forking the app](https://github.com/CharlyWargnier/google-search-console-connector) and adjust the `RowCap` variable! 🙌
+* You can filter any dimension in the table even if the dimension hasn't been pre-selected. I'm working on a fix for this.
+    
+    """
+    )
+
+    st.write("")
