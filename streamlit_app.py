@@ -1,3 +1,4 @@
+# basic imports
 import streamlit as st
 import pandas as pd
 
@@ -6,21 +7,18 @@ import searchconsole
 from apiclient import discovery
 from google_auth_oauthlib.flow import Flow
 
-# imports for streamlit elements
-from streamlit_elements import Elements
-
-# from streamlit_elements import elements, sync, event
-
 # imports for aggrid
 from st_aggrid import AgGrid
 from st_aggrid import AgGrid
-import pandas as pd
 from st_aggrid.grid_options_builder import GridOptionsBuilder
 from st_aggrid.shared import JsCode
 from st_aggrid import GridUpdateMode, DataReturnMode
 
-# from os import error
+# all other imports
 import os
+from streamlit_elements import Elements
+
+###############################################################################
 
 # The code below is for the layout of the page
 if "widen" not in st.session_state:
@@ -32,10 +30,14 @@ st.set_page_config(
     layout=layout, page_title="Google Search Console Connector", page_icon="🎈"
 )
 
+###############################################################################
+
 # row limit
 RowCap = 10000
 
-tab1, tab2 = st.tabs(["Main", "⚙️ Limitations"])
+###############################################################################
+
+tab1, tab2 = st.tabs(["Main", "About"])
 
 with tab1:
 
@@ -92,7 +94,6 @@ with tab1:
 
         flow = Flow.from_client_config(
             credentials,
-            # st.secrets["installed"],
             scopes=["https://www.googleapis.com/auth/webmasters.readonly"],
             redirect_uri="urn:ietf:wg:oauth:2.0:oob",
         )
@@ -113,21 +114,6 @@ with tab1:
         st.write("")
 
     container3 = st.sidebar.container()
-
-    st.sidebar.write("")
-
-    with st.sidebar.expander("About this app"):
-
-        st.write(
-            """
-    Say good riddance to the Google Search Console 1,000 row limit! 👋
-
-    This mighty app connects to your Google Search Console profiles in one click and gets you **ALL** the data you need!
-        
-        """
-        )
-
-        st.write("")
 
     st.sidebar.write("")
 
@@ -166,7 +152,7 @@ with tab1:
                             "searchAppearance",
                             "country",
                         ),
-                        help="the dimension to analyze",
+                        help="Choose a top dimension",
                     )
 
                 with col2:
@@ -181,7 +167,7 @@ with tab1:
                             "searchAppearance",
                             "country",
                         ),
-                        help="you can expand  your analysis by adding a nested dimension",
+                        help="Choose a nested dimension",
                     )
 
                 with col3:
@@ -196,7 +182,7 @@ with tab1:
                             "searchAppearance",
                             "country",
                         ),
-                        help="you can expand  your analysis even more by adding a second nested dimension!",
+                        help="Choose a second nested dimension",
                     )
 
                 st.write("")
@@ -206,8 +192,15 @@ with tab1:
                 with col1:
                     search_type = st.selectbox(
                         "Search type",
-                        ("web","video","image","news","googleNews"),
-                        help="You can specify the search type data you want to retrieve by using the search_type method with your query. The following values are currently supported by the API: news, video, image, web, discover & googleNews. If you don't use this method, the default value used will be web,",
+                        ("web", "video", "image", "news", "googleNews"),
+                        help="""
+                        Specify the search type you want to retrieve
+                        -   **Web**: Results that appear in the All tab. This includes any image or video results shown in the All results tab.
+                        -   **Image**: Results that appear in the Images search results tab.
+                        -   **Video**: Results that appear in the Videos search results tab.
+                        -   **News**: Results that show in the News search results tab.
+
+                        """,
                     )
 
                 with col2:
@@ -222,7 +215,7 @@ with tab1:
                             "Last 16 months",
                         ),
                         index=0,
-                        help="You can specify the date range you want to retrieve by using the timescale method with your query. The following values are currently supported by the API: Last 7 days, Last 30 days, Last 3 months, Last 6 months, Last 12 months, Last 16 months. If you don't use this method, the default value used will be Last 7 days",
+                        help="Specify the date range",
                     )
 
                     if timescale == "Last 7 days":
@@ -240,7 +233,7 @@ with tab1:
 
                 st.write("")
 
-                with st.expander("Filters", expanded=True):
+                with st.expander("Advanced Filters", expanded=False):
 
                     col1, col2, col3 = st.columns(3)
 
@@ -248,7 +241,9 @@ with tab1:
                         filter_page_or_query = st.selectbox(
                             "Dimension to filter (#1)",
                             ("query", "page", "device", "searchAppearance", "country"),
-                            help="You can specify the filter type you want to use by using the filter_type method with your query. The following values are currently supported by the API: page, query. If you don't use this method, the default value used will be page,",
+                            help="""
+                            You can choose to filter dimensions and apply filters before executing a query.
+                            """,
                         )
 
                     with col2:
@@ -262,7 +257,9 @@ with tab1:
                                 "includingRegex",
                                 "excludingRegex",
                             ),
-                            help="Note that if you use Regex in your filter, you must follow RE2 syntax.",
+                            help="""
+                            Note that if you use Regex in your filter, you must follow the `RE2` syntax.
+                            """,
                         )
 
                     with col3:
@@ -277,7 +274,9 @@ with tab1:
                             "Dimension to filter (#2)",
                             ("query", "page", "device", "searchAppearance", "country"),
                             key="filter_page_or_query2",
-                            help="You can specify the filter type you want to use by using the filter_type method with your query. The following values are currently supported by the API: page, query. If you don't use this method, the default value used will be page,",
+                            help="""
+                            You can choose to filter dimensions and apply filters before executing a query.
+                            """,
                         )
 
                     with col2:
@@ -292,7 +291,9 @@ with tab1:
                                 "excludingRegex",
                             ),
                             key="filter_type2",
-                            help="Note that if you use Regex in your filter, you must follow RE2 syntax.",
+                            help="""
+                            Note that if you use Regex in your filter, you must follow the `RE2` syntax.
+                            """,
                         )
 
                     with col3:
@@ -308,7 +309,9 @@ with tab1:
                             "Dimension to filter (#3)",
                             ("query", "page", "device", "searchAppearance", "country"),
                             key="filter_page_or_query3",
-                            help="You can specify the filter type you want to use by using the filter_type method with your query. The following values are currently supported by the API: page, query. If you don't use this method, the default value used will be page,",
+                            help="""
+                            You can choose to filter dimensions and apply filters before executing a query.
+                            """,
                         )
 
                     with col2:
@@ -323,7 +326,9 @@ with tab1:
                                 "excludingRegex",
                             ),
                             key="filter_type3",
-                            help="Note that if you use Regex in your filter, you must follow RE2 syntax.",
+                            help="""
+                            Note that if you use Regex in your filter, you must follow the `RE2` syntax.
+                            """,
                         )
 
                     with col3:
@@ -382,7 +387,6 @@ with tab1:
 
                 account = searchconsole.account.Account(service, credentials)
                 site_list = service.sites().list().execute()
-                # webproperty = account[webpropertiesNEW]
                 return account, site_list
 
             account, site_list = get_account_site_list_and_webproperty(
@@ -404,11 +408,6 @@ with tab1:
 
                     webpropertiesNEW = st.selectbox("Select web property", lst)
 
-                    # filename = webpropertiesNEW.replace("https://www.", "")
-                    # filename = filename.replace("http://www.", "")
-                    # filename = filename.replace(".", "")
-                    # filename = filename.replace("/", "")
-
                     col1, col2, col3 = st.columns(3)
 
                     with col1:
@@ -422,7 +421,7 @@ with tab1:
                                 "searchAppearance",
                                 "country",
                             ),
-                            help="the dimension to analyze",
+                            help="Choose your top dimension",
                         )
 
                     with col2:
@@ -437,7 +436,7 @@ with tab1:
                                 "searchAppearance",
                                 "country",
                             ),
-                            help="you can expand  your analysis by adding a nested dimension",
+                            help="Choose a nested dimension",
                         )
 
                     with col3:
@@ -452,7 +451,7 @@ with tab1:
                                 "searchAppearance",
                                 "country",
                             ),
-                            help="you can expand  your analysis even more by adding a second nested dimension!",
+                            help="Choose a second nested dimension",
                         )
 
                     st.write("")
@@ -478,7 +477,7 @@ with tab1:
                                 "Last 16 months",
                             ),
                             index=0,
-                            help="You can specify the date range you want to retrieve by using the timescale method with your query. The following values are currently supported by the API: Last 7 days, Last 30 days, Last 3 months, Last 6 months, Last 12 months, Last 16 months. If you don't use this method, the default value used will be Last 7 days",
+                            help="Specify the date range",
                         )
 
                         if timescale == "Last 7 days":
@@ -496,7 +495,7 @@ with tab1:
 
                     st.write("")
 
-                    with st.expander("💎 Filters", expanded=True):
+                    with st.expander("Advaned Filters", expanded=False):
 
                         col1, col2, col3 = st.columns(3)
 
@@ -545,7 +544,8 @@ with tab1:
                                     "country",
                                 ),
                                 key="filter_page_or_query2",
-                                help="You can specify the filter type you want to use by using the filter_type method with your query. The following values are currently supported by the API: page, query. If you don't use this method, the default value used will be page,",
+                                # help="You can specify the filter type you want to use by using the filter_type method with your query. The following values are currently supported by the API: page, query. If you don't use this method, the default value used will be page,",
+                                help="You can choose to filter dimensions and apply filters before executing a query. The filter types supported by the API are the same as those available in the UI: `contains`, `equals`, `notContains`, `notEquals`, `includingRegex` , and `excludingRegex`",
                             )
 
                         with col2:
@@ -582,7 +582,7 @@ with tab1:
                                     "country",
                                 ),
                                 key="filter_page_or_query3",
-                                help="You can specify the filter type you want to use by using the filter_type method with your query. The following values are currently supported by the API: page, query. If you don't use this method, the default value used will be page,",
+                                help="You can choose to filter dimensions and apply filters before executing a query. The filter types supported by the API are the same as those available in the UI: `contains`, `equals`, `notContains`, `notEquals`, `includingRegex` , and `excludingRegex`",
                             )
 
                         with col2:
@@ -641,13 +641,8 @@ with tab1:
                 else:
                     pass
 
-            # form.slider("Inside the form")
-            # form.form_submit_button("Submit")
-            # def get_search_console_data(webproperty, days=-720):
-
             def get_search_console_data(webproperty):
                 if webproperty is not None:
-                    # query = webproperty.query.range(start="today", days=days).dimension("query")
                     report = (
                         webproperty.query.search_type(search_type)
                         .range("today", days=timescale)
@@ -659,8 +654,6 @@ with tab1:
                         .get()
                         .to_dataframe()
                     )
-                    # report
-                    # df = pd.DataFrame(r.rows)
                     return report
                 else:
                     st.warning("No webproperty found")
@@ -698,7 +691,7 @@ with tab1:
                     )
                     return report
 
-            # some conditions to check which function to call
+            # Here are some conditions to check which function to call
 
             if nested_dimension == "none" and nested_dimension_2 == "none":
 
@@ -739,20 +732,19 @@ with tab1:
             st.write("")
 
             st.write(
-                "##### This API call has returned ",
-                # len(df.index),
-                f"{len(df.index):,}" " rows. The beta is capped at ",
-                str(int(RowCap / 1000)) + "k",
-                " rows. More soon!",
+                "##### # of results retuned by API call: ",
+                # f"{len(df.index):,}" " rows.",
+                len(df.index),
+                # str(int(RowCap / 1000)) + "k",
+                # " rows. More soon!",
             )
 
             col1, col2, col3 = st.columns([1, 1, 1])
 
             with col1:
-                # st.selectbox("Layout", ["centered", "wide"], key="layout", help="You can change the layout to either centered or wide.")
                 st.caption("")
                 check_box = st.checkbox(
-                    "💥 Ag-Grid mode!", help="Tick this box to see the data in Ag-grid!"
+                    "Ag-Grid mode", help="Tick this box to see your data in Ag-grid!"
                 )
                 st.caption("")
 
@@ -761,7 +753,7 @@ with tab1:
                 st.checkbox(
                     "Widen layout",
                     key="widen",
-                    help="Tick this box to change the layout to 'wide' mode",
+                    help="Tick this box to switch the layout to 'wide' mode",
                 )
                 st.caption("")
 
@@ -771,7 +763,6 @@ with tab1:
 
                 @st.cache
                 def convert_df(df):
-                    # IMPORTANT: Cache the conversion to prevent computation on every rerun
                     return df.to_csv().encode("utf-8")
 
                 csv = convert_df(df)  #
@@ -795,7 +786,7 @@ with tab1:
                     enablePivot=True, enableValue=True, enableRowGroup=True
                 )
                 gb.configure_selection(selection_mode="multiple", use_checkbox=True)
-                gb.configure_side_bar()  # side_bar is clearly a typo :) should by sidebar
+                gb.configure_side_bar()
                 gridOptions = gb.build()
 
                 with st.expander("💡 Ag-grid tips", expanded=False):
@@ -845,13 +836,10 @@ with tab1:
                     fit_columns_on_grid_load=True,
                     configure_side_bar=True,
                 )
-                # df = pd.DataFrame(response["selected_rows"])
 
     except ValueError as ve:
 
-        st.warning(
-            "⚠️ You need to log in via Google OAuth first. Log in via left-hand side menu!"
-        )
+        st.warning("⚠️ You need to log in via Google OAuth first.")
 
     except IndexError:
         st.info(
@@ -859,6 +847,19 @@ with tab1:
         )
 
 with tab2:
+
+    st.write("")
+
+    st.write(
+        """
+    Say good riddance to the Google Search Console 1,000 row limit! 👋
+
+    This mighty app connects to your Google Search Console profiles in one click and gets you **ALL** the data you need!
+        
+        """
+    )
+
+    st.write("")
 
     st.write(
         """
