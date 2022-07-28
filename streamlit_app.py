@@ -103,7 +103,7 @@ with tab1:
         code = st.text_input(
             "Google Oauth token",
             key="my_token_input",
-            help="Please sign in to your account via Google OAuth, then paste your OAuth token in the field below.",
+            help="Sign in to your account via Google OAuth, then paste your OAuth token in the field below.",
             type="password",
         )
 
@@ -239,7 +239,7 @@ with tab1:
 
                     with col1:
                         filter_page_or_query = st.selectbox(
-                            "Dimension to filter (#1)",
+                            "Dimension to filter #1",
                             ("query", "page", "device", "searchAppearance", "country"),
                             help="""
                             You can choose to filter dimensions and apply filters before executing a query.
@@ -271,7 +271,7 @@ with tab1:
 
                     with col1:
                         filter_page_or_query2 = st.selectbox(
-                            "Dimension to filter (#2)",
+                            "Dimension to filter #2",
                             ("query", "page", "device", "searchAppearance", "country"),
                             key="filter_page_or_query2",
                             help="""
@@ -306,7 +306,7 @@ with tab1:
 
                     with col1:
                         filter_page_or_query3 = st.selectbox(
-                            "Dimension to filter (#3)",
+                            "Dimension to filter #3",
                             ("query", "page", "device", "searchAppearance", "country"),
                             key="filter_page_or_query3",
                             help="""
@@ -495,13 +495,13 @@ with tab1:
 
                     st.write("")
 
-                    with st.expander("Advaned Filters", expanded=False):
+                    with st.expander("Advanced Filters", expanded=False):
 
                         col1, col2, col3 = st.columns(3)
 
                         with col1:
                             filter_page_or_query = st.selectbox(
-                                "Dimension to filter (#1)",
+                                "Dimension to filter #1",
                                 (
                                     "query",
                                     "page",
@@ -535,7 +535,7 @@ with tab1:
 
                         with col1:
                             filter_page_or_query2 = st.selectbox(
-                                "Dimension to filter (#2)",
+                                "Dimension to filter #2",
                                 (
                                     "query",
                                     "page",
@@ -573,7 +573,7 @@ with tab1:
 
                         with col1:
                             filter_page_or_query3 = st.selectbox(
-                                "Dimension to filter (#3)",
+                                "Dimension to filter #3",
                                 (
                                     "query",
                                     "page",
@@ -732,11 +732,8 @@ with tab1:
             st.write("")
 
             st.write(
-                "##### # of results retuned by API call: ",
-                # f"{len(df.index):,}" " rows.",
+                "##### # of results returned by API call: ",
                 len(df.index),
-                # str(int(RowCap / 1000)) + "k",
-                # " rows. More soon!",
             )
 
             col1, col2, col3 = st.columns([1, 1, 1])
@@ -759,22 +756,22 @@ with tab1:
 
             if not check_box:
 
-                st.dataframe(df, height=500)
-
                 @st.cache
                 def convert_df(df):
                     return df.to_csv().encode("utf-8")
 
-                csv = convert_df(df)  #
-
-                st.caption("")
+                csv = convert_df(df)
 
                 st.download_button(
-                    label="Download table as CSV",
+                    label="Download CSV",
                     data=csv,
                     file_name="large_df.csv",
                     mime="text/csv",
                 )
+
+                st.caption("")
+
+                st.dataframe(df, height=500)
 
             elif check_box:
 
@@ -839,7 +836,7 @@ with tab1:
 
     except ValueError as ve:
 
-        st.warning("⚠️ You need to log in via Google OAuth first.")
+        st.warning("⚠️ You need to sign in to your Google account first!")
 
     except IndexError:
         st.info(
@@ -849,24 +846,36 @@ with tab1:
 with tab2:
 
     st.write("")
-
-    st.write(
-        """
-    Say good riddance to the Google Search Console 1,000 row limit! 👋
-
-    This mighty app connects to your Google Search Console profiles in one click and gets you **ALL** the data you need!
-        
-        """
-    )
-
     st.write("")
 
     st.write(
         """
-* There's a `10K` row limit per API call on the [Cloud](https://streamlit.io/cloud) version. You can remove  this limit by [forking the app](https://github.com/CharlyWargnier/google-search-console-connector) and adjust the `RowCap` variable! 🙌
-* You can filter any dimension in the table even if the dimension hasn't been pre-selected. I'm working on a fix for this.
+
+    #### About this app
+
+    * ✔️ One-click connect to the [Google Search Console API](https://developers.google.com/webmaster-tools)
+    * ✔️ Easily traverse your account hierarchy
+    * ✔️ Go beyond the [1K row UI limit](https://www.gsqi.com/marketing-blog/how-to-bulk-export-search-features-from-gsc/)
+    * ✔️ Enrich your data querying with multiple dimensions layers and extra filters!
+
+    ✍️ You can read the blog post [here](https://blog.streamlit.io/p/e89fd54e-e6cd-4e00-8a59-39e87536b260/) for more information.
+
+    #### Going beyond the `10K` row limit
+
+    * There's a `10K` row limit per API call on the [Cloud](https://streamlit.io/cloud) version to prevent crashes.
+    * You can remove that limit by forking this code and adjusting the `RowCap` variable in the `streamlit_app.py` file
+
+    #### Kudos
+
+    This app relies on Josh Carty's excellent [Search Console Python wrapper](https://github.com/joshcarty/google-searchconsole). Big kudos to him for creating it!
+
+    #### Questions, comments, or report a 🐛?
+
+    * If you have any questions or comments, please DM [me](https://twitter.com/DataChaz). Alternatively, you can ask the [Streamlit community](https://discuss.streamlit.io).
+    * If you find a bug, please raise an issue in [Github](https://github.com/CharlyWargnier/google-search-console-connector/pulls).
+
+    #### Known bugs
+    * You can filter any dimension in the table even if the dimension hasn't been pre-selected. I'm working on a fix for this.
     
     """
     )
-
-    st.write("")
