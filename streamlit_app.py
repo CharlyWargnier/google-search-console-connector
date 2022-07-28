@@ -233,7 +233,7 @@ with tab1:
 
                 st.write("")
 
-                with st.expander("Advanced Filters", expanded=False):
+                with st.expander("✨ Advanced Filters", expanded=False):
 
                     col1, col2, col3 = st.columns(3)
 
@@ -509,7 +509,7 @@ with tab1:
                                     "searchAppearance",
                                     "country",
                                 ),
-                                help="You can specify the filter type you want to use by using the filter_type method with your query. The following values are currently supported by the API: page, query. If you don't use this method, the default value used will be page,",
+                                help="You can choose to filter dimensions and apply filters before executing a query.",
                             )
 
                         with col2:
@@ -523,14 +523,14 @@ with tab1:
                                     "includingRegex",
                                     "excludingRegex",
                                 ),
-                                help="Note that if you use Regex in your filter, you must follow RE2 syntax.",
+                                help="Note that if you use Regex in your filter, you must follow `RE2` syntax.",
                             )
 
                         with col3:
                             filter_keyword = st.text_input(
                                 "Keyword(s) to filter ",
                                 "",
-                                help="You can specify the keyword(s) you want to filter by using the filter_keyword method with your query. If you don't use this method, the default value used will be empty,",
+                                help="Add the keyword(s) you want to filter",
                             )
 
                         with col1:
@@ -544,8 +544,7 @@ with tab1:
                                     "country",
                                 ),
                                 key="filter_page_or_query2",
-                                # help="You can specify the filter type you want to use by using the filter_type method with your query. The following values are currently supported by the API: page, query. If you don't use this method, the default value used will be page,",
-                                help="You can choose to filter dimensions and apply filters before executing a query. The filter types supported by the API are the same as those available in the UI: `contains`, `equals`, `notContains`, `notEquals`, `includingRegex` , and `excludingRegex`",
+                                help="You can choose to filter dimensions and apply filters before executing a query.",
                             )
 
                         with col2:
@@ -560,7 +559,7 @@ with tab1:
                                     "excludingRegex",
                                 ),
                                 key="filter_type2",
-                                help="Note that if you use Regex in your filter, you must follow RE2 syntax.",
+                                help="Note that if you use Regex in your filter, you must follow `RE2` syntax.",
                             )
 
                         with col3:
@@ -568,7 +567,7 @@ with tab1:
                                 "Keyword(s) to filter ",
                                 "",
                                 key="filter_keyword2",
-                                help="You can specify the keyword(s) you want to filter by using the filter_keyword method with your query. If you don't use this method, the default value used will be empty,",
+                                help="Add the keyword(s) you want to filter",
                             )
 
                         with col1:
@@ -582,7 +581,7 @@ with tab1:
                                     "country",
                                 ),
                                 key="filter_page_or_query3",
-                                help="You can choose to filter dimensions and apply filters before executing a query. The filter types supported by the API are the same as those available in the UI: `contains`, `equals`, `notContains`, `notEquals`, `includingRegex` , and `excludingRegex`",
+                                help="You can choose to filter dimensions and apply filters before executing a query.",
                             )
 
                         with col2:
@@ -597,7 +596,7 @@ with tab1:
                                     "excludingRegex",
                                 ),
                                 key="filter_type3",
-                                help="Note that if you use Regex in your filter, you must follow RE2 syntax.",
+                                help="Note that if you use Regex in your filter, you must follow `RE2` syntax.",
                             )
 
                         with col3:
@@ -605,7 +604,7 @@ with tab1:
                                 "Keyword(s) to filter ",
                                 "",
                                 key="filter_keyword3",
-                                help="You can specify the keyword(s) you want to filter by using the filter_keyword method with your query. If you don't use this method, the default value used will be empty,",
+                                help="Add the keyword(s) you want to filter",
                             )
 
                         st.write("")
@@ -785,43 +784,11 @@ with tab1:
                 gb.configure_selection(selection_mode="multiple", use_checkbox=True)
                 gb.configure_side_bar()
                 gridOptions = gb.build()
-
-                with st.expander("💡 Ag-grid tips", expanded=False):
-
-                    st.markdown(
-                        """
-    #### Easy export!
-
-    You can export your fitlered dataframe to CSV, Excel, as follows:
-
-    ```bash
-    >> place your mouse on the grid and right click on it
-    >> select "Export to CSV"
-
-    ```
-
-    #### Selecting rows
-
-    Tip! Hold the shift key when selecting rows to select multiple rows at once!
-
-
-    #### Pivot tables in Ag-grid
-
-    You can export your fitlered dataframe to CSV, Excel, as follows:
-
-    ```bash
-    >> place your mouse on the grid and right click on it
-    >> select "Export to CSV"
-
-    ```
-                    )"""
-                    )
-
-                    st.success(
-                        f"""
-                            🎈 Tip! Hold the shift key when selecting rows to select multiple rows at once!
+                st.info(
+                    f"""
+                            💡 Tip! Hold the '⇧ Shift' key when selecting rows to select multiple rows at once!
                             """
-                    )
+                )
 
                 response = AgGrid(
                     df,
