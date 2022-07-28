@@ -13,7 +13,7 @@
 #### Going beyond the `10K` row limit
 
    * There's a `10K` row limit per API call on the [Cloud](https://streamlit.io/cloud) version to prevent crashes.
-   * You can remove that limit by [forking the app](https://github.com/CharlyWargnier/google-search-console-connector) and adjusting the `RowCap` variable in the `streamlit_app.py` file
+   * You can remove that limit by forking this code and adjusting the `RowCap` variable in the `streamlit_app.py` file
 
 #### Kudos
 
