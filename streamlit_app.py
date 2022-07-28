@@ -462,7 +462,15 @@ with tab1:
                         search_type = st.selectbox(
                             "Search type",
                             ("web", "news", "video", "googleNews", "image"),
-                            help="You can specify the search type data you want to retrieve by using the search_type method with your query. The following values are currently supported by the API: video, image, web and news/googleNews. If you don't use this method, the default value used will be web,",
+                        help="""
+                        Specify the search type you want to retrieve
+                        -   **Web**: Results that appear in the All tab. This includes any image or video results shown in the All results tab.
+                        -   **Image**: Results that appear in the Images search results tab.
+                        -   **Video**: Results that appear in the Videos search results tab.
+                        -   **News**: Results that show in the News search results tab.
+
+                        """,
+
                         )
 
                     with col2:
@@ -495,7 +503,7 @@ with tab1:
 
                     st.write("")
 
-                    with st.expander("Advanced Filters", expanded=False):
+                    with st.expander("✨ Advanced Filters", expanded=False):
 
                         col1, col2, col3 = st.columns(3)
 
