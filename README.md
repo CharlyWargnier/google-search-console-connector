@@ -1,9 +1,6 @@
 
 #  🎈Google Search Console Streamlit Connector
 
-
-## About this app
-
 [![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://search-console-connector.streamlitapp.com/)
 
    * ✔️ One-click connect to the [Google Search Console API](https://developers.google.com/webmaster-tools)
