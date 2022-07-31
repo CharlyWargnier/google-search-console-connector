@@ -33,7 +33,7 @@ st.set_page_config(
 ###############################################################################
 
 # row limit
-RowCap = 10000
+RowCap = 25000
 
 ###############################################################################
 
@@ -835,9 +835,9 @@ with tab2:
 
     ✍️ You can read the blog post [here](https://blog.streamlit.io/p/e89fd54e-e6cd-4e00-8a59-39e87536b260/) for more information.
 
-    #### Going beyond the `10K` row limit
+    #### Going beyond the `25K` row limit
 
-    * There's a `10K` row limit per API call on the [Cloud](https://streamlit.io/cloud) version to prevent crashes.
+    * There's a `25K` row limit per API call on the [Cloud](https://streamlit.io/cloud) version to prevent crashes.
     * You can remove that limit by forking this code and adjusting the `RowCap` variable in the `streamlit_app.py` file
 
     #### Kudos
