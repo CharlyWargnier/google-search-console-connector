@@ -17,6 +17,7 @@ from st_aggrid import GridUpdateMode, DataReturnMode
 # all other imports
 import os
 from streamlit_elements import Elements
+import streamlit.components.v1 as components
 
 ###############################################################################
 
@@ -36,6 +37,21 @@ st.set_page_config(
 RowCap = 25000
 
 ###############################################################################
+
+_component_func = components.declare_component(
+    # We give the component a simple, descriptive name ("my_component"
+    # does not fit this bill, so please choose something better for your
+    # own component :)
+    "my_component",
+    # Pass `url` here to tell Streamlit that the component will be served
+    # by the local dev server that you run via `npm run start`.
+    # (This is useful while your component is in development.)
+    url="http://localhost:3001",
+)
+
+def my_component(name, key=None):
+    component_value = _component_func(name=name, key=key, default='')
+    return component_value
 
 tab1, tab2 = st.tabs(["Main", "About"])
 
@@ -63,7 +79,10 @@ with tab1:
         # st.write(st.session_state.my_token_input)
         st.session_state.my_token_received = True
 
+    oauthtoken = my_component("World")
+
     with st.sidebar.form(key="my_form"):
+        st.session_state["my_token_input"] = oauthtoken
 
         st.markdown("")
 
@@ -98,7 +117,7 @@ with tab1:
             redirect_uri="urn:ietf:wg:oauth:2.0:oob",
         )
 
-        auth_url, _ = flow.authorization_url(prompt="consent")
+        # auth_url, _ = flow.authorization_url(prompt="consent")
 
         code = st.text_input(
             "Google Oauth token",
