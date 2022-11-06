@@ -46,7 +46,7 @@ _component_func = components.declare_component(
     # Pass `url` here to tell Streamlit that the component will be served
     # by the local dev server that you run via `npm run start`.
     # (This is useful while your component is in development.)
-    url="http://localhost:3001",
+    url="https://charlywargnier-google-search-console-conn-streamlit-app-ododgi.streamlit.app:3001",
 )
 
 def my_component(name, key=None):
