@@ -1,4 +1,5 @@
 # basic imports
+import asyncio
 import streamlit as st
 import pandas as pd
 
@@ -50,6 +51,7 @@ with tab1:
     # Convert secrets from the TOML file to strings
     clientSecret = str(st.secrets["installed"]["client_secret"])
     clientId = str(st.secrets["installed"]["client_id"])
+    redirectUri = str(st.secrets["installed"]["redirect_uris"][0])
 
     st.markdown("")
 
@@ -62,6 +64,8 @@ with tab1:
     def charly_form_callback():
         # st.write(st.session_state.my_token_input)
         st.session_state.my_token_received = True
+        code = st.experimental_get_query_params()['code'][0]
+        st.session_state.my_token_input = code
 
     with st.sidebar.form(key="my_form"):
 
@@ -77,7 +81,7 @@ with tab1:
             start_icon=mt.icons.exit_to_app,
             onclick="none",
             style={"color": "#FFFFFF", "background": "#FF4B4B"},
-            href="https://accounts.google.com/o/oauth2/auth?response_type=code&client_id=686079794781-0bt8ot3ie81iii7i17far5vj4s0p20t7.apps.googleusercontent.com&redirect_uri=urn%3Aietf%3Awg%3Aoauth%3A2.0%3Aoob&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fwebmasters.readonly&state=vryYlMrqKikWGlFVwqhnMpfqr1HMiq&prompt=consent&access_type=offline",
+            href="https://accounts.google.com/o/oauth2/auth?response_type=code&client_id=" + clientId + "&redirect_uri=" + redirectUri + "&scope=https://www.googleapis.com/auth/webmasters.readonly&access_type=offline&prompt=consent",
         )
 
         mt.show(key="687")
@@ -95,7 +99,8 @@ with tab1:
         flow = Flow.from_client_config(
             credentials,
             scopes=["https://www.googleapis.com/auth/webmasters.readonly"],
-            redirect_uri="urn:ietf:wg:oauth:2.0:oob",
+            redirect_uri= redirectUri,
+
         )
 
         auth_url, _ = flow.authorization_url(prompt="consent")
@@ -371,7 +376,7 @@ with tab1:
 
             else:
                 pass
-
+                
         if st.session_state.my_token_received == True:
 
             @st.experimental_singleton
@@ -383,6 +388,7 @@ with tab1:
                     version="v3",
                     credentials=credentials,
                     cache_discovery=False,
+
                 )
 
                 account = searchconsole.account.Account(service, credentials)
@@ -399,6 +405,7 @@ with tab1:
             for dicts in first_value:
                 a = dicts.get("siteUrl")
                 lst.append(a)
+
 
             if lst:
 
@@ -854,3 +861,4 @@ with tab2:
     
     """
     )
+
