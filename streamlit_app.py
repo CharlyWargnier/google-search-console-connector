@@ -36,6 +36,7 @@ st.set_page_config(
 # row limit
 RowCap = 25000
 
+
 ###############################################################################
 
 tab1, tab2 = st.tabs(["Main", "About"])
@@ -64,7 +65,7 @@ with tab1:
     def charly_form_callback():
         # st.write(st.session_state.my_token_input)
         st.session_state.my_token_received = True
-        code = st.experimental_get_query_params()['code'][0]
+        code = st.experimental_get_query_params()["code"][0]
         st.session_state.my_token_input = code
 
     with st.sidebar.form(key="my_form"):
@@ -81,7 +82,11 @@ with tab1:
             start_icon=mt.icons.exit_to_app,
             onclick="none",
             style={"color": "#FFFFFF", "background": "#FF4B4B"},
-            href="https://accounts.google.com/o/oauth2/auth?response_type=code&client_id=" + clientId + "&redirect_uri=" + redirectUri + "&scope=https://www.googleapis.com/auth/webmasters.readonly&access_type=offline&prompt=consent",
+            href="https://accounts.google.com/o/oauth2/auth?response_type=code&client_id="
+            + clientId
+            + "&redirect_uri="
+            + redirectUri
+            + "&scope=https://www.googleapis.com/auth/webmasters.readonly&access_type=offline&prompt=consent",
         )
 
         mt.show(key="687")
@@ -99,22 +104,36 @@ with tab1:
         flow = Flow.from_client_config(
             credentials,
             scopes=["https://www.googleapis.com/auth/webmasters.readonly"],
-            redirect_uri= redirectUri,
-
+            redirect_uri=redirectUri,
         )
 
         auth_url, _ = flow.authorization_url(prompt="consent")
 
-        code = st.text_input(
-            "Google Oauth token",
-            key="my_token_input",
-            help="Sign in to your account via Google OAuth, then paste your OAuth token in the field below.",
-            type="password",
-        )
-
         submit_button = st.form_submit_button(
             label="Access GSC API", on_click=charly_form_callback
         )
+
+        st.write("")
+
+        with st.expander("How to access your GSC data?"):
+            st.markdown(
+                """
+            1. Click on the `Sign-in with Google` button
+            2. You will be redirected to the Google Oauth screen
+            3. Choose the Google account you want to use & click `Continue`
+            5. You will be redirected back to this app.
+            6. Click on the "Access GSC API" button.
+            7. Voilà! 🙌 
+            """
+            )
+            st.write("")
+
+        with st.expander("Check your Oauth token"):
+            code = st.text_input(
+                "",
+                key="my_token_input",
+                label_visibility="collapsed",
+            )
 
         st.write("")
 
@@ -376,7 +395,7 @@ with tab1:
 
             else:
                 pass
-                
+
         if st.session_state.my_token_received == True:
 
             @st.experimental_singleton
@@ -388,7 +407,6 @@ with tab1:
                     version="v3",
                     credentials=credentials,
                     cache_discovery=False,
-
                 )
 
                 account = searchconsole.account.Account(service, credentials)
@@ -405,7 +423,6 @@ with tab1:
             for dicts in first_value:
                 a = dicts.get("siteUrl")
                 lst.append(a)
-
 
             if lst:
 
@@ -469,7 +486,7 @@ with tab1:
                         search_type = st.selectbox(
                             "Search type",
                             ("web", "news", "video", "googleNews", "image"),
-                        help="""
+                            help="""
                         Specify the search type you want to retrieve
                         -   **Web**: Results that appear in the All tab. This includes any image or video results shown in the All results tab.
                         -   **Image**: Results that appear in the Images search results tab.
@@ -477,7 +494,6 @@ with tab1:
                         -   **News**: Results that show in the News search results tab.
 
                         """,
-
                         )
 
                     with col2:
@@ -861,4 +877,3 @@ with tab2:
     
     """
     )
-
