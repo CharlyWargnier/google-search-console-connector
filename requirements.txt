@@ -1,5 +1,7 @@
 #streamlit
-streamlit==1.9.0
+#streamlit==1.9.0
+
+streamlit==1.13.0
 
 searchconsole
 streamlit-elements==0.0.2
